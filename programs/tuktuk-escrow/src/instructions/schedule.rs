@@ -48,11 +48,11 @@ pub struct Schedule<'info> {
     #[account(mut)]
     pub task_queue_authority: UncheckedAccount<'info>,
 
-    /// CHECK: Initialized in CPI - address = PDA(["task", task_queue, task_id], tuktuk)
+    /// CHECK: PDA(["task", task_queue, task_id], tuktuk)
     #[account(mut)]
     pub task: UncheckedAccount<'info>,
 
-    /// CHECK: PDA signer - no data stored here
+    /// CHECK: PDA Signer for task_queue_authority
     #[account(
         mut,
         seeds = [QUEUE_AUTHORITY_SEED],
@@ -123,12 +123,6 @@ impl<'info> Schedule<'info> {
                 description: "escrow auto_refund on expiry".to_string(),
             },
         )?;
-
-        msg!(
-            "Scheduled auto_refund for escrow {} at timestamp {}",
-            escrow_key,
-            self.escrow.expires_at
-        );
 
         Ok(())
     }
